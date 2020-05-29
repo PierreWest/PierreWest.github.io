@@ -1,0 +1,223 @@
+<?php
+$dbc = mysqli_connect('localhost', 'root', 'root', 'lesson');
+if(!isset($_COOKIE['user_id'])) {
+	if(isset($_POST['submit'])) {
+		$user_username = mysqli_real_escape_string($dbc, trim($_POST['username']));
+		$user_password = mysqli_real_escape_string($dbc, trim($_POST['password']));
+		if(!empty($user_username) && !empty($user_password)) {
+			$query = "SELECT `user_id` , `username` FROM `signup` WHERE username = '$user_username' AND password = SHA('$user_password')";
+			$data = mysqli_query($dbc,$query);
+			if(mysqli_num_rows($data) == 1) {
+				$row = mysqli_fetch_assoc($data);
+				setcookie('user_id', $row['user_id'], time() + (60*60*24*30));
+				setcookie('username', $row['username'], time() + (60*60*24*30));
+				$home_url = 'http://' . $_SERVER['HTTP_HOST'];
+				header('Location: '. $home_url);
+			}
+			else {
+				echo 'Извините, вы должны ввести правильные имя пользователя и пароль';
+			}
+		}
+		else {
+			echo 'Извините вы должны заполнить поля правильно';
+		}
+	}
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Drip Lounge</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="css/my.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+</script>
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+</head>
+<body>
+<section class="header">
+<div class="container">
+<nav class="navbar navbar-expand-lg navbar-light">
+<a class="navbar-brand"href="#"><img src="images/183808_10805619_2006001_c8de4f45_image.jpg"></a>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-
+target="#navbarNav" aria-controls="navbarNav" aria-expanded="false">
+<i class="fa fa-bars"></i>
+</button>
+<div class="collapse navbar-collapse" id="navbarNav">
+  <ul class="navbar-nav ml-auto text-right">
+  <li class="nav-item">
+  <a class="nav-link active-home" href="#">Home</a>
+  </li>
+  <li class="nav-item">
+  <a class="nav-link" href="#">Features</a>
+  </li>
+  <li class="nav-item">
+  <a class="nav-link" href="#">Pricing</a>
+  </li>
+  <li class="nav-item">
+  <a class="nav-link" href="#">Disabled</a>
+    </li>
+  </ul>
+  </div>
+</nav>
+</content>
+<section>
+<?php
+	if(empty($_COOKIE['username'])) {
+?>
+	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+		<label for="username">Логин:</label>
+	<input type="text" name="username">
+	<label for="password">Пароль:</label>
+	<input type="password" name="password">
+	<button type="submit" name="submit">Вход</button>
+	<a href="signup.php">Регистрация</a>
+	</form>
+<?php
+}
+else {
+	?>
+	<p><a href="myprofile.php">Мой профиль</a></p>
+	<p><a href="exit.php">Выйти</a></p>
+	<a href="signup.php">Регистрация</a>
+<?php
+}
+?>
+</section>
+
+       <div class="row banner">
+         <div class="col-md-6">
+           <h1>Самый <br> Стильный <br> Lounge</h1>
+           <p>Здесь ты окунешся в невероятную атмосферу<br>и познаешь настоящий стиль <br> нашей кальянной</p>
+         <a href="#" class="express-btn">Join Free</a>
+         <a href="#">Explore Free</a>
+         </div>
+         <div class="col-md-6 text-center">
+           <img src="images/close-up-hookah-with-fruits-blue-water_140725-1994.jpg" class="img-fluid">
+         </div>
+     </div>
+
+
+</div>
+</section>
+<section class="service">
+  <div class="container">
+    <h2 class="title">С нашими осбенностями вы можете<br> ознакомиться ниже</h2>
+<p class="subtitle">Особенности Drip Lounge</p>
+<div class="row">
+  <div class="col-md-4">
+    <div class="service-box">
+      <img src="images/express-delivery.jpg">
+      <h6>Express Delivery</h6>
+  <p>Если вам привычней курить кальян дома то у нас есть быстрая доставка кальянов на дом</p>
+<i class="fa fa-arrow-right"></i>
+ </div>
+</div>
+<div class="col-md-4">
+  <div class="service-box active-service">
+    <img src="images/Price-Icon.png">
+    <h6>Best Price</h6>
+<p>Мы заботимя о вашем отдыхе и предлагаем вам наши услуги по приемлимым ценам</p>
+<i class="fa fa-arrow-right"></i>
+</div>
+</div>
+<div class="col-md-4">
+  <div class="service-box">
+    <img src="images/hookah.png">
+    <h6>Drip Hookah</h6>
+<p>Большой ассортимент различних,качественных табаков
+  с абсолютно любыми вкусами</p>
+<i class="fa fa-arrow-right"></i>
+</div>
+</div>
+      </div>
+</div>
+</section>
+
+<section class="feature">
+   <div class="container">
+     <div class="row">
+       <div class="col-md-6 text-center">
+         <img src="images/calboy.jpg">
+       </div>
+       <div class="col-md-6">
+       <h2>В нашем заведении <br> лучший персонал.</h2>
+       <p>Каждый кальян, который мы забиваем, <br> каждая чашка чая, которую мы завариваем — всё <br> делается с максимальным качеством и внимаем к деталям.</p>
+         <a href="#">WATCH NOW</a>
+         </div>
+      </div>
+   </div>
+ </section>
+
+ <section class="explore">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-md-6">
+        <h2>Drip Lounge-сделает <br>важу жизнь лучше</h2>
+        <p>Мы стараемся делать лучшее из возможного, <br> чтобы время вашего отдыха проходило <br> максимально комфортно.</p>
+          <a href="#">EXPLORE NOW</a>
+          </div>
+          <div class="col-md-6">
+            <img src="images/soksmoke.jpg" class="img-fluid">
+          </div>
+       </div>
+    </div>
+  </section>
+  <section class="review">
+    <div class="container">
+      <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+    <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="images/pierre.jpg">
+      <div class="carousel-caption">
+        <h6>Pierre Bourne</h6>
+        <small>THE ONE OF THE BEST PRODUCERS @ ON THE PLANET</small>
+        <p>Pierre Bourne говорит,что <br>посещение Drip Lounge доставляет ему
+          столько же удовольствия  <br>как написание целой песни</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="images/playboi.jpg">
+      <div class="carousel-caption">
+        <h6>Playboi Carti</h6>
+        <small>FASHION GUY & ARTIST </small>
+        <p>Playboi Carti, является одним <br>из самых частых гостей в нашем
+          заведении и он подметил <br>наш невероятный дизайн</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="images/kanye-west-.jpg">
+      <div class="carousel-caption">
+        <h6>Kanye West</h6>
+        <small>THE ONE OF THE BEST ARTIST @ ON THE PLANET</small>
+        <p>Kanye West-хип-хоп исполнитель, <br> рэпер, продюсер, композитор и
+          дизайнер <br>отметил наш дружелюбный персонал и наши вкусные,дымные кальяны</p>
+      </div>
+    </div>
+  </div>
+</div>
+    </div>
+  </section>
+  <section class="footer text-center">
+    <div class="container">
+      <h2>Subscribe To Our Newsletter</h2>
+<form>
+  <input type="email" placeholder="Enter Your Email.." required>
+  <button type="submit">SUBSCRIBE</button>
+  <small>Copyright @ 2020, Designed by Pervin Magamedov</small>
+</form>
+    </div>
+  </section>
+</body>
+</html>
